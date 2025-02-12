@@ -1749,6 +1749,17 @@ class AnnotationEditorUIManager {
 
     switch (type) {
       case AnnotationEditorParamsType.CREATE:
+        if (value && value.type === "rectangle") {
+          this.currentLayer.createAndAddNewEditor({
+            offsetX: value.x,
+            offsetY: value.y,
+          }, false, {
+            tmpType: value.type,
+            tmpWidth: value.width,
+            tmpHeight: value.height,
+          });
+          return;
+        }
         this.currentLayer.addNewEditor();
         return;
       case AnnotationEditorParamsType.HIGHLIGHT_DEFAULT_COLOR:
