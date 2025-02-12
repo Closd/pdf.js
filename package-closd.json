@@ -1,4 +1,25 @@
 {
   "name": "closd-pdfjs",
-  "type": "module"
+  "version": "0.0.1",
+  "type": "module",
+  "files":  [
+    "build/*",
+    "web/cmaps/*",
+    "web/images/*",
+    "web/locale/de/viewer.ftl",
+    "web/locale/en-CA/viewer.ftl",
+    "web/locale/en-GB/viewer.ftl",
+    "web/locale/en-US/viewer.ftl",
+    "web/locale/fr/viewer.ftl",
+    "web/locale/uk/viewer.ftl",
+    "web/locale/locale.json",
+    "web/standard_fonts/*",
+    "web/debugger.css",
+    "web/debugger.mjs",
+    "web/viewer.css",
+    "web/viewer.css",
+    "web/viewer.html",
+    "web/viewer.mjs",
+    "web/viewer.mjs.map"
+  ]
 }
