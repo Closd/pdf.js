@@ -56,6 +56,9 @@ class StampEditor extends AnnotationEditor {
     super({ ...params, name: "stampEditor" });
     this.#bitmapUrl = params.bitmapUrl;
     this.#bitmapFile = params.bitmapFile;
+    this.tmpType = params.tmpType;
+    this.tmpWidth = params.tmpWidth;
+    this.tmpHeight = params.tmpHeight;
   }
 
   /** @inheritdoc */
@@ -251,6 +254,36 @@ class StampEditor extends AnnotationEditor {
       return;
     }
 
+    if (this.tmpType === "rectangle") {
+      this.#bitmapPromise = new Promise(resolve => {
+        setTimeout(async () => {
+          function createBlackImageBlob(width, height) {
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = 'black';
+            ctx.fillRect(0, 0, width, height);
+            return new Promise((resolve, reject) => {
+                canvas.toBlob((blob) => {
+                    if (blob) {
+                        resolve(blob);
+                    } else {
+                        reject(new Error("Error"));
+                    }
+                }, 'image/png');
+            });
+          }
+  
+          this._uiManager.enableWaiting(true);
+          const data = await this._uiManager.imageManager.getFromBlob('fake_id', createBlackImageBlob(this.tmpWidth, this.tmpHeight));
+          this.#getBitmapFetched(data);
+          resolve();
+        }, 1);
+      }).finally(() => this.#getBitmapDone());
+      return;
+    }
+
     const input = document.createElement("input");
     if (typeof PDFJSDev !== "undefined" && PDFJSDev.test("TESTING")) {
       input.hidden = true;
@@ -380,7 +413,9 @@ class StampEditor extends AnnotationEditor {
     this.div.hidden = true;
     this.div.setAttribute("role", "figure");
 
-    this.addAltTextButton();
+    if (this.tmpType !== 'rectangle') {
+      this.addAltTextButton();
+    }
 
     if (!this.#missingCanvas) {
       if (this.#bitmap) {
