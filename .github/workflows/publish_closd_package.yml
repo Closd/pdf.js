@@ -3,10 +3,7 @@ on:
   push:
     branches:
       - feature/V2-4855-create-custom-version
-permissions:
-  contents: read
-  id-token: write
-  packages: write
+permissions: write-all
 
 jobs:
   publish:
