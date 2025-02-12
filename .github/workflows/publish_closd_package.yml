@@ -35,6 +35,10 @@ jobs:
       - name: Build the `pdfjs` generic folder
         run: npx gulp generic
 
+      - name: Configure npm
+        working-directory: ./build/generic
+        run: echo "@closd:registry=https://npm.pkg.github.com" > ~/.npmrc
+
       - name: Publish to GitHub Packages Registry
         run: npm publish ./build/generic
         env:
