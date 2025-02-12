@@ -17,6 +17,7 @@ import { RenderingStates, ScrollMode, SpreadMode } from "./ui_utils.js";
 import { AppOptions } from "./app_options.js";
 import { LinkTarget } from "./pdf_link_service.js";
 import { PDFViewerApplication } from "./app.js";
+import { AnnotationEditorParamsType } from "pdfjs-lib";
 
 /* eslint-disable-next-line no-unused-vars */
 const pdfjsVersion =
@@ -259,6 +260,26 @@ function webViewerLoad() {
     }
   }
   PDFViewerApplication.run(config);
+
+  // TODO Find why we need to click on "Image" button to allow this to work
+  // TODO Add page management
+  setTimeout(() => {
+    PDFViewerApplication.eventBus.dispatch("switchannotationeditorparams", {
+      source: PDFViewerApplication.annotationEditorParams,
+      type: AnnotationEditorParamsType.CREATE,
+      value: { type: 'rectangle', x: 20, y: 50, width: 100, height: 20 },
+    });
+    PDFViewerApplication.eventBus.dispatch("switchannotationeditorparams", {
+      source: PDFViewerApplication.annotationEditorParams,
+      type: AnnotationEditorParamsType.CREATE,
+      value: { type: 'rectangle', x: 200, y: 50, width: 50, height: 40 },
+    });
+    PDFViewerApplication.eventBus.dispatch("switchannotationeditorparams", {
+      source: PDFViewerApplication.annotationEditorParams,
+      type: AnnotationEditorParamsType.CREATE,
+      value: { type: 'rectangle', x: 20, y: 150, width: 150, height: 20 },
+    });
+  }, 5000);
 }
 
 // Block the "load" event until all pages are loaded, to ensure that printing
