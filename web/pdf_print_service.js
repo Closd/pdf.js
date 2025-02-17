@@ -327,7 +327,7 @@ window.addEventListener(
       !event.altKey &&
       (!event.shiftKey || window.chrome || window.opera)
     ) {
-      window.print();
+      // window.print();
 
       event.preventDefault();
       event.stopImmediatePropagation();

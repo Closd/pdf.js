@@ -26,7 +26,7 @@
   --sidebar-transition-duration: 200ms;
   --sidebar-transition-timing-function: ease;
 
-  --toolbar-height: 32px;
+  --toolbar-height: 64px;
   --toolbar-horizontal-padding: 1px;
   --toolbar-vertical-padding: 2px;
   --icon-size: 16px;
@@ -36,7 +36,7 @@
   --doorhanger-height: 8px;
 
   --main-color: rgb(12 12 13);
-  --body-bg-color: rgb(212 212 215);
+  /* --body-bg-color:rgb(212 212 215); */
   --progressBar-color: rgb(10 132 255);
   --progressBar-bg-color: rgb(221 221 222);
   --progressBar-blend-color: rgb(116 177 239);
@@ -46,14 +46,12 @@
   --toolbar-icon-hover-bg-color: rgb(0 0 0);
 
   --sidebar-narrow-bg-color: rgb(212 212 215 / 0.9);
-  --sidebar-toolbar-bg-color: rgb(245 246 247);
-  --toolbar-bg-color: rgb(249 249 250);
-  --toolbar-border-color: rgb(184 184 184);
+  --sidebar-toolbar-bg-color:white;
+  --toolbar-bg-color: white;
+  --toolbar-border-color: rgb(var(--v-theme-grey-lighten-4));
   --toolbar-box-shadow: 0 1px 0 var(--toolbar-border-color);
   --toolbar-border-bottom: none;
-  --toolbarSidebar-box-shadow: inset calc(-1px * var(--dir-factor)) 0 0
-      rgb(0 0 0 / 0.25),
-    0 1px 0 rgb(0 0 0 / 0.15), 0 0 1px rgb(0 0 0 / 0.1);
+  --toolbarSidebar-box-shadow:inset calc(-1px * var(--dir-factor)) 0 0 rgb(var(--v-theme-grey-lighten-4)), 0 1px 0 rgb(var(--v-theme-grey-lighten-4)), 0 0 1px rgb(var(--v-theme-grey-lighten-4));
   --toolbarSidebar-border-bottom: none;
   --button-hover-color: rgb(221 222 223);
   --toggled-btn-color: rgb(0 0 0);
@@ -72,7 +70,7 @@
   --treeitem-selected-color: rgb(0 0 0 / 0.9);
   --treeitem-selected-bg-color: rgb(0 0 0 / 0.25);
   --thumbnail-hover-color: rgb(0 0 0 / 0.1);
-  --thumbnail-selected-color: rgb(0 0 0 / 0.2);
+  --thumbnail-selected-color:rgb(var(--v-theme-darkblue-500));
   --doorhanger-bg-color: rgb(255 255 255);
   --doorhanger-border-color: rgb(12 12 13 / 0.2);
   --doorhanger-hover-color: rgb(12 12 13);
@@ -267,6 +265,7 @@ body {
   background-color: rgb(0 0 0);
   width: 100%;
   height: 100%;
+  margin-top: 0;
   overflow: hidden;
   cursor: none;
   user-select: none;
@@ -305,6 +304,7 @@ body {
   transition-property: inset-inline-start;
   transition-duration: var(--sidebar-transition-duration);
   transition-timing-function: var(--sidebar-transition-timing-function);
+  background-color: white;
 }
 
 #outerContainer:is(.sidebarMoving, .sidebarOpen) #sidebarContainer {
@@ -330,7 +330,7 @@ body {
   overflow: auto;
   position: absolute;
   width: 100%;
-  box-shadow: inset calc(-1px * var(--dir-factor)) 0 0 rgb(0 0 0 / 0.25);
+  box-shadow:inset calc(-1px * var(--dir-factor)) 0 0 var(--toolbar-border-color);
 }
 
 #viewerContainer {
@@ -339,6 +339,7 @@ body {
   inset: var(--toolbar-height) 0 0;
   outline: none;
   z-index: 0;
+  margin-top: 40px;
 }
 
 #viewerContainer:not(.pdfPresentationMode) {
@@ -734,6 +735,7 @@ body {
 #thumbnailView {
   width: calc(100% - 60px);
   padding: 10px 30px 0;
+  box-sizing: content-box;
 }
 
 #thumbnailView > a:is(:active, :focus) {
@@ -751,7 +753,7 @@ body {
   height: var(--thumbnail-height);
   margin: 0 10px 5px;
   padding: 1px;
-  border: 7px solid transparent;
+  border: 2px solid transparent;
   border-radius: 2px;
 }
 
@@ -760,7 +762,7 @@ body {
 }
 
 a:focus > .thumbnail,
-.thumbnail:hover {
+.thumbnail {
   border-color: var(--thumbnail-hover-color);
 }
 
