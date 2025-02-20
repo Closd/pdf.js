@@ -2375,7 +2375,7 @@ class PDFWorker {
       }
       const worker =
         typeof PDFJSDev === "undefined"
-          ? await import("pdfjs/pdf.worker.js")
+          ? await import("pdfjs/pdf.worker.min.mjs")
           : await __non_webpack_import__(this.workerSrc);
       return worker.WorkerMessageHandler;
     };

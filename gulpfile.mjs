@@ -1126,7 +1126,7 @@ gulp.task(
     function createGeneric() {
       console.log();
       console.log("### Creating generic viewer");
-      const defines = { ...DEFINES, GENERIC: true };
+      const defines = { ...DEFINES, MINIFIED: true, GENERIC: true };
 
       return buildGeneric(defines, GENERIC_DIR);
     }
