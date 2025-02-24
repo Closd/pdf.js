@@ -25,10 +25,10 @@ import { fileURLToPath } from "url";
 import fs from "fs";
 import gulp from "gulp";
 import hljs from "highlight.js";
-import htmlmin from "gulp-htmlmin"
 import layouts from "@metalsmith/layouts";
 import markdown from "@metalsmith/markdown";
 import Metalsmith from "metalsmith";
+import { minify } from 'htmlfy'
 import ordered from "ordered-read-streams";
 import path from "path";
 import postcss from "gulp-postcss";
@@ -43,6 +43,7 @@ import rename from "gulp-rename";
 import replace from "gulp-replace";
 import stream from "stream";
 import TerserPlugin from "terser-webpack-plugin";
+import through2 from "through2";
 import Vinyl from "vinyl";
 import webpack2 from "webpack";
 import webpackStream from "webpack-stream";
@@ -1085,7 +1086,7 @@ function buildGeneric(defines, dir) {
     createWasmBundle().pipe(gulp.dest(dir + "web/wasm")),
 
     preprocessHTML("web/viewer.html", defines)
-      .pipe(htmlmin({ collapseWhitespace: true }))
+      .pipe(minifyHTML())
       .pipe(gulp.dest(dir + "web")),
     preprocessCSS("web/viewer.css", defines)
       .pipe(
@@ -1109,6 +1110,16 @@ function buildGeneric(defines, dir) {
       .pipe(rename("package.json"))
       .pipe(gulp.dest(dir)),
   ]);
+}
+
+function minifyHTML() {
+  return through2.obj(function (file, _, cb) {
+    if (file.isBuffer()) {
+      const minified = minify(file.contents.toString());
+      file.contents = Buffer.from(minified);
+    }
+    cb(null, file);
+  });
 }
 
 // Builds the generic production viewer that is only compatible with up-to-date
