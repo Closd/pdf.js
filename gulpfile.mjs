@@ -20,22 +20,22 @@ import {
 import { exec, execSync, spawn, spawnSync } from "child_process";
 import autoprefixer from "autoprefixer";
 import babel from "@babel/core";
+import CleanCSS from "clean-css";
 import crypto from "crypto";
 import { fileURLToPath } from "url";
 import fs from "fs";
 import gulp from "gulp";
 import hljs from "highlight.js";
+import htmlmin from "gulp-html-minifier-terser";
 import layouts from "@metalsmith/layouts";
 import markdown from "@metalsmith/markdown";
 import Metalsmith from "metalsmith";
-import { minify } from 'htmlfy'
 import ordered from "ordered-read-streams";
 import path from "path";
 import postcss from "gulp-postcss";
 import postcssDarkThemeClass from "postcss-dark-theme-class";
 import postcssDirPseudoClass from "postcss-dir-pseudo-class";
 import postcssDiscardComments from "postcss-discard-comments";
-import postcssMinify from "@csstools/postcss-minify"
 import postcssNesting from "postcss-nesting";
 import { preprocess } from "./external/builder/builder.mjs";
 import relative from "metalsmith-html-relative";
@@ -43,7 +43,6 @@ import rename from "gulp-rename";
 import replace from "gulp-replace";
 import stream from "stream";
 import TerserPlugin from "terser-webpack-plugin";
-import through2 from "through2";
 import Vinyl from "vinyl";
 import webpack2 from "webpack";
 import webpackStream from "webpack-stream";
@@ -119,6 +118,12 @@ const DEFINES = Object.freeze({
   LIB: false,
   IMAGE_DECODERS: false,
 });
+
+const CSS_MINIFY_OPTIONS = {
+  compatibility: '*',
+  inline: ['all'],
+  level: 1
+};
 
 function transform(charEncoding, transformFunction) {
   return new stream.Transform({
@@ -1086,7 +1091,7 @@ function buildGeneric(defines, dir) {
     createWasmBundle().pipe(gulp.dest(dir + "web/wasm")),
 
     preprocessHTML("web/viewer.html", defines)
-      .pipe(minifyHTML())
+      .pipe(htmlmin({ collapseWhitespace: true }))
       .pipe(gulp.dest(dir + "web")),
     preprocessCSS("web/viewer.css", defines)
       .pipe(
@@ -1096,9 +1101,12 @@ function buildGeneric(defines, dir) {
           postcssNesting(),
           postcssDarkThemeClass(),
           autoprefixer(AUTOPREFIXER_CONFIG),
-          postcssMinify,
         ])
       )
+      .on('data', function(file) {
+        const bufferFile = new CleanCSS(CSS_MINIFY_OPTIONS).minify(file.contents)
+        return file.contents = Buffer.from(bufferFile.styles)
+      })
       .pipe(gulp.dest(dir + "web")),
 
     gulp
@@ -1110,16 +1118,6 @@ function buildGeneric(defines, dir) {
       .pipe(rename("package.json"))
       .pipe(gulp.dest(dir)),
   ]);
-}
-
-function minifyHTML() {
-  return through2.obj(function (file, _, cb) {
-    if (file.isBuffer()) {
-      const minified = minify(file.contents.toString());
-      file.contents = Buffer.from(minified);
-    }
-    cb(null, file);
-  });
 }
 
 // Builds the generic production viewer that is only compatible with up-to-date
