@@ -25,6 +25,7 @@ import { fileURLToPath } from "url";
 import fs from "fs";
 import gulp from "gulp";
 import hljs from "highlight.js";
+import htmlmin from "gulp-htmlmin"
 import layouts from "@metalsmith/layouts";
 import markdown from "@metalsmith/markdown";
 import Metalsmith from "metalsmith";
@@ -34,6 +35,7 @@ import postcss from "gulp-postcss";
 import postcssDarkThemeClass from "postcss-dark-theme-class";
 import postcssDirPseudoClass from "postcss-dir-pseudo-class";
 import postcssDiscardComments from "postcss-discard-comments";
+import postcssMinify from "@csstools/postcss-minify"
 import postcssNesting from "postcss-nesting";
 import { preprocess } from "./external/builder/builder.mjs";
 import relative from "metalsmith-html-relative";
@@ -1082,7 +1084,9 @@ function buildGeneric(defines, dir) {
     createStandardFontBundle().pipe(gulp.dest(dir + "web/standard_fonts")),
     createWasmBundle().pipe(gulp.dest(dir + "web/wasm")),
 
-    preprocessHTML("web/viewer.html", defines).pipe(gulp.dest(dir + "web")),
+    preprocessHTML("web/viewer.html", defines)
+      .pipe(htmlmin({ collapseWhitespace: true }))
+      .pipe(gulp.dest(dir + "web")),
     preprocessCSS("web/viewer.css", defines)
       .pipe(
         postcss([
@@ -1091,6 +1095,7 @@ function buildGeneric(defines, dir) {
           postcssNesting(),
           postcssDarkThemeClass(),
           autoprefixer(AUTOPREFIXER_CONFIG),
+          postcssMinify,
         ])
       )
       .pipe(gulp.dest(dir + "web")),
