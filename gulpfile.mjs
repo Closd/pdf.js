@@ -20,11 +20,13 @@ import {
 import { exec, execSync, spawn, spawnSync } from "child_process";
 import autoprefixer from "autoprefixer";
 import babel from "@babel/core";
+import CleanCSS from "clean-css";
 import crypto from "crypto";
 import { fileURLToPath } from "url";
 import fs from "fs";
 import gulp from "gulp";
 import hljs from "highlight.js";
+import htmlmin from "gulp-html-minifier-terser";
 import layouts from "@metalsmith/layouts";
 import markdown from "@metalsmith/markdown";
 import Metalsmith from "metalsmith";
@@ -116,6 +118,12 @@ const DEFINES = Object.freeze({
   LIB: false,
   IMAGE_DECODERS: false,
 });
+
+const CSS_MINIFY_OPTIONS = {
+  compatibility: '*',
+  inline: ['all'],
+  level: 1
+};
 
 function transform(charEncoding, transformFunction) {
   return new stream.Transform({
@@ -1082,7 +1090,9 @@ function buildGeneric(defines, dir) {
     createStandardFontBundle().pipe(gulp.dest(dir + "web/standard_fonts")),
     createWasmBundle().pipe(gulp.dest(dir + "web/wasm")),
 
-    preprocessHTML("web/viewer.html", defines).pipe(gulp.dest(dir + "web")),
+    preprocessHTML("web/viewer.html", defines)
+      .pipe(htmlmin({ collapseWhitespace: true }))
+      .pipe(gulp.dest(dir + "web")),
     preprocessCSS("web/viewer.css", defines)
       .pipe(
         postcss([
@@ -1093,6 +1103,10 @@ function buildGeneric(defines, dir) {
           autoprefixer(AUTOPREFIXER_CONFIG),
         ])
       )
+      .on('data', function(file) {
+        const bufferFile = new CleanCSS(CSS_MINIFY_OPTIONS).minify(file.contents)
+        return file.contents = Buffer.from(bufferFile.styles)
+      })
       .pipe(gulp.dest(dir + "web")),
 
     gulp
@@ -1126,7 +1140,7 @@ gulp.task(
     function createGeneric() {
       console.log();
       console.log("### Creating generic viewer");
-      const defines = { ...DEFINES, GENERIC: true };
+      const defines = { ...DEFINES, MINIFIED: true, GENERIC: true };
 
       return buildGeneric(defines, GENERIC_DIR);
     }
