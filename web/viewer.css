@@ -742,6 +742,7 @@ body {
   padding: 0 24px;
   margin-top: 16px;
   box-sizing: content-box;
+  overflow-x: hidden;
 }
 
 #thumbnailView > a:is(:active, :focus) {
