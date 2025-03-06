@@ -22,11 +22,11 @@
   --inline-end: right;
   /*#endif*/
 
-  --sidebar-width: 200px;
+  --sidebar-width: 150px;
   --sidebar-transition-duration: 200ms;
   --sidebar-transition-timing-function: ease;
 
-  --toolbar-height: 64px;
+  --toolbar-height: 56px;
   --toolbar-horizontal-padding: 1px;
   --toolbar-vertical-padding: 2px;
   --icon-size: 16px;
@@ -45,7 +45,7 @@
   --toolbar-icon-bg-color: rgb(0 0 0);
   --toolbar-icon-hover-bg-color: rgb(0 0 0);
 
-  --sidebar-narrow-bg-color: rgb(212 212 215 / 0.9);
+  --sidebar-narrow-bg-color: white;
   --sidebar-toolbar-bg-color:white;
   --toolbar-bg-color: white;
   --toolbar-border-color: rgb(var(--v-theme-grey-lighten-4));
@@ -305,6 +305,7 @@ body {
   transition-duration: var(--sidebar-transition-duration);
   transition-timing-function: var(--sidebar-transition-timing-function);
   background-color: white;
+  overflow: auto;
 }
 
 #outerContainer:is(.sidebarMoving, .sidebarOpen) #sidebarContainer {
@@ -325,10 +326,11 @@ body {
 }
 
 #sidebarContent {
-  inset-block: var(--toolbar-height) 0;
   inset-inline-start: 0;
   overflow: auto;
   position: absolute;
+  /* Using padding to keep the box-shadow and having a visual margin */
+  padding-top: 16px;
   width: 100%;
   box-shadow:inset calc(-1px * var(--dir-factor)) 0 0 var(--toolbar-border-color);
 }
@@ -361,6 +363,8 @@ body {
 }
 
 #toolbarSidebar {
+  /* currently unused, so we hide it */
+  display: none;
   width: 100%;
   height: var(--toolbar-height);
   background-color: var(--sidebar-toolbar-bg-color);
@@ -399,6 +403,8 @@ body {
 }
 
 #sidebarResizer {
+  /* We hide it for now because it breaks our set width and other margin styles */
+  display: none;
   position: absolute;
   inset-block: 0;
   inset-inline-end: -6px;
@@ -724,7 +730,6 @@ body {
 #outlineView,
 #attachmentsView,
 #layersView {
-  position: absolute;
   width: calc(100% - 8px);
   inset-block: 0;
   padding: 4px 4px 0;
@@ -733,9 +738,11 @@ body {
 }
 
 #thumbnailView {
-  width: calc(100% - 60px);
-  padding: 10px 30px 0;
+  width: calc(100% - 49px);
+  padding: 0 24px;
+  margin-top: 16px;
   box-sizing: content-box;
+  overflow-x: hidden;
 }
 
 #thumbnailView > a:is(:active, :focus) {
@@ -751,8 +758,7 @@ body {
   float: var(--inline-start);
   width: var(--thumbnail-width);
   height: var(--thumbnail-height);
-  margin: 0 10px 5px;
-  padding: 1px;
+  margin: 0 0 8px;
   border: 2px solid transparent;
   border-radius: 2px;
 }
