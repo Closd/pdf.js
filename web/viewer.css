@@ -403,6 +403,8 @@ body {
 }
 
 #sidebarResizer {
+  /* We hide it for now because it breaks our set width and other margin styles */
+  display: none;
   position: absolute;
   inset-block: 0;
   inset-inline-end: -6px;
