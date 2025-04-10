@@ -306,6 +306,7 @@ body {
   transition-timing-function: var(--sidebar-transition-timing-function);
   background-color: white;
   overflow: auto;
+  box-shadow: inset calc(-1px * var(--dir-factor)) 0 0 var(--toolbar-border-color);
 }
 
 #outerContainer:is(.sidebarMoving, .sidebarOpen) #sidebarContainer {
@@ -1753,6 +1754,20 @@ dialog :link {
 
   #toolbarContainer #toolbarViewer .toolbarButtonSpacer {
     width: 0;
+  }
+  #sidebarContainer {
+    --sidebar-width: 114px;
+  }
+
+  #thumbnailView {
+    /* This aligns with the padding we have that would end on the container's width. It's currently known to be padding-left + padding-right + 1 */
+    width: calc(100% - 33px);
+    padding: 0 16px;
+  }
+  /* `!important` added because the initial stylings are usually inlined otherwise */
+  .thumbnail {
+    --thumbnail-width: 78px !important;
+    --thumbnail-height: 106px !important;
   }
 }
 
