@@ -298,7 +298,6 @@ body {
   width: var(--sidebar-width);
   visibility: hidden;
   z-index: 1;
-  font: message-box;
   border-top: 1px solid transparent;
   border-inline-end: var(--doorhanger-border-color-whcm);
   transition-property: inset-inline-start;
@@ -353,10 +352,6 @@ body {
 #outerContainer.sidebarOpen #viewerContainer:not(.pdfPresentationMode) {
   inset-inline-start: var(--sidebar-width);
   transition-property: inset-inline-start;
-}
-
-#sidebarContainer :is(input, button, select) {
-  font: message-box;
 }
 
 .toolbar {
@@ -1002,7 +997,6 @@ dialog :link {
   outline: none;
   border-radius: 2px;
   box-sizing: border-box;
-  font: message-box;
   flex: none;
   position: relative;
   padding: 0;
@@ -1585,7 +1579,6 @@ dialog :link {
   padding: var(--toolbar-vertical-padding) var(--toolbar-horizontal-padding);
   position: relative;
   box-sizing: border-box;
-  font: message-box;
   background-color: var(--toolbar-bg-color);
   box-shadow: var(--toolbar-box-shadow);
   border-bottom: var(--toolbar-border-bottom);
@@ -1597,10 +1590,6 @@ dialog :link {
 
     > * {
       flex: none;
-    }
-
-    input {
-      font: message-box;
     }
 
     .toolbarButtonSpacer {
