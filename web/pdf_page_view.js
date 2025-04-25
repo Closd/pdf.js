@@ -462,7 +462,7 @@ class PDFPageView {
     }
   }
 
-  async #renderTextLayer() {
+  async renderTextLayer() {
     if (!this.textLayer) {
       return;
     }
@@ -476,7 +476,7 @@ class PDFPageView {
       if (ex instanceof AbortException) {
         return;
       }
-      console.error("#renderTextLayer:", ex);
+      console.error("renderTextLayer:", ex);
       error = ex;
     }
     this.#dispatchLayerRendered("textlayerrendered", error);
@@ -841,7 +841,7 @@ class PDFPageView {
         this.textLayer.hide();
         this.structTreeLayer?.hide();
       } else if (redrawTextLayer) {
-        this.#renderTextLayer();
+        this.renderTextLayer();
       }
     }
   }
@@ -1100,7 +1100,7 @@ class PDFPageView {
           viewport.rawDims
         );
 
-        this.#renderTextLayer();
+        this.renderTextLayer();
 
         if (this.annotationLayer) {
           await this.#renderAnnotationLayer();
