@@ -891,6 +891,30 @@ class PDFPageView {
     }
   }
 
+  generateTextLayer() {
+    if (
+      !this.textLayer &&
+      this.#textLayerMode !== TextLayerMode.DISABLE &&
+      !this.pdfPage.isPureXfa
+    ) {
+      this._accessibilityManager ||= new TextAccessibilityManager();
+
+      this.textLayer = new TextLayerBuilder({
+        pdfPage: this.pdfPage,
+        highlighter: this._textHighlighter,
+        accessibilityManager: this._accessibilityManager,
+        enablePermissions:
+          this.#textLayerMode === TextLayerMode.ENABLE_PERMISSIONS,
+        onAppend: textLayerDiv => {
+          // Pause translation when inserting the textLayer in the DOM.
+          this.l10n.pause();
+          this.#addLayer(textLayerDiv, "textLayer");
+          this.l10n.resume();
+        },
+      });
+    }
+  }
+
   async draw() {
     if (this.renderingState !== RenderingStates.INITIAL) {
       console.error("Must be in new state before drawing");
