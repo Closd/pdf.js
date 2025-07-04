@@ -204,6 +204,7 @@ class PDFPageView {
     const div = document.createElement("div");
     div.className = "page";
     div.setAttribute("data-page-number", this.id);
+    div.setAttribute("data-locator", "page");
     div.setAttribute("role", "region");
     div.setAttribute("data-l10n-id", "pdfjs-page-landmark");
     div.setAttribute("data-l10n-args", JSON.stringify({ page: this.id }));
